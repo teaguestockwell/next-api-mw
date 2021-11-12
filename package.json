@@ -11,9 +11,9 @@
     "node": ">=10"
   },
   "scripts": {
-    "start": "tsdx watch",
     "build": "tsdx build",
-    "test": "",
+    "test": "sleep 5 && cypress run & cypress run",
+    "test:watch": "cypress open",
     "lint": "tsdx lint",
     "prepare": "tsdx build",
     "size": "size-limit",
@@ -25,7 +25,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "tsdx lint"
+      "pre-commit": "tsdx lint && pretty-quick --staged"
     }
   },
   "prettier": {
@@ -54,6 +54,8 @@
     "cypress": "^9.0.0",
     "husky": "^7.0.4",
     "next": "^12.0.3",
+    "prettier": "^2.4.1",
+    "pretty-quick": "^3.1.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "size-limit": "^6.0.4",
