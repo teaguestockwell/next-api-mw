@@ -1,21 +1,34 @@
 import {Middleware} from '../../src/index'
 
-const middleware = new Middleware()
+const mw = new Middleware({
+  name: 'console logger',
+  consoleLogLevel: 'all',
+  logger: (req,res,e) => {
+    console.log('a custom logger: ' + res.statusCode)
+  },
+  onServerError: (res) => {
+    res.status(500).json({
+      msg: `Something went wrong. Its not you, it's us.`
+    })
+  },
+})
 
-const usingMethod = middleware.produce(async (req,res,abort, verbs:string[]) => {
+const usingMethods = mw.create(async (req,res,end, verbs:string[]) => {
   const method = String(req.method).toUpperCase()
   const allowedMethods = verbs.map((v) => v.toUpperCase())
 
   res.setHeader('Access-Control-Allow-Methods', allowedMethods.join(', '))
 
   if (!allowedMethods.includes(method)) {
-    abort({status: 405, body: `method ${method} not allowed`})
+    res.status(405).json({msg: `Method: ${method} not allowed`})
+    end()
   }
 
-  return Date.now()
-})
+  return method
+}) 
 
-export default middleware.handle(async (req,res) => {
-  const time = await usingMethod(req,res,['put'])
-  res.status(200).json(time)
+export default mw.run(async (req,res,end) => {
+  const method = await usingMethods(req,res,['get', 'POST'])
+  res.json({msg: `Method: ${method}`})
+  end()
 })
