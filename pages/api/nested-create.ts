@@ -26,15 +26,15 @@ const usingHelloParam = nextApiMw.create(async (req, res, end) => {
   return hello as string
 })
 
-const usingBodyKey = nextApiMw.create((req, res, end) => {
+const usingBodyKey = nextApiMw.create(async (req, res, end) => {
   const { key } = req.body
 
-  if (!key) {
+  if (!key || typeof key !== 'string') {
     res.status(400).send({ msg: 'key body param req' })
     end()
   }
 
-  return key
+  return key as string
 })
 
 const usingNested = nextApiMw.create(async (req, res) => {

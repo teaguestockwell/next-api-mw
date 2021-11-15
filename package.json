@@ -12,7 +12,8 @@
   },
   "scripts": {
     "build": "tsdx build",
-    "test": "sleep 5 && cypress run & cypress run",
+    "dev": "next dev -p 3000",
+    "test": "cypress run",
     "test:watch": "cypress open",
     "lint": "tsdx lint",
     "prepare": "tsdx build",
@@ -34,16 +35,16 @@
     "trailingComma": "es5",
     "tabWidth": 2
   },
-  "name": "nextjs-api-mw",
+  "name": "next-api-mw",
   "author": "teagueStockwell",
-  "module": "dist/nextjs-api-middleware.esm.js",
+  "module": "dist/next-api-mw.esm.js",
   "size-limit": [
     {
-      "path": "dist/nextjs-api-middleware.cjs.production.min.js",
+      "path": "dist/next-api-mw.cjs.production.min.js",
       "limit": "10 KB"
     },
     {
-      "path": "dist/nextjs-api-middleware.esm.js",
+      "path": "dist/next-api-mw.esm.js",
       "limit": "10 KB"
     }
   ],
