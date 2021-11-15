@@ -4,10 +4,10 @@ it('GET /class => 200', () => {
     url: 'http://localhost:3000/api/class?foo=bar',
     failOnStatusCode: false,
   }).then((response) => {
-    expect(response.status).to.eq(200);
-    expect(response.body).to.deep.equal({foo: 'bar'});
-  });
-});
+    expect(response.status).to.eq(200)
+    expect(response.body).to.deep.equal({ foo: 'bar' })
+  })
+})
 
 it('GET /create?hello=world => 400', () => {
   cy.request({
@@ -15,6 +15,6 @@ it('GET /create?hello=world => 400', () => {
     url: 'http://localhost:3000/api/class?hello=world',
     failOnStatusCode: false,
   }).then((response) => {
-    expect(response.status).to.eq(400);
-  });
-});
+    expect(response.status).to.eq(400)
+  })
+})

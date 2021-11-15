@@ -5,9 +5,9 @@ it('GET /create => 200', () => {
     failOnStatusCode: false,
     body: { key: 'asd' },
   }).then((response) => {
-    expect(response.status).to.eq(200);
-  });
-});
+    expect(response.status).to.eq(200)
+  })
+})
 
 it('GET /create => 200 body', () => {
   cy.request({
@@ -20,9 +20,9 @@ it('GET /create => 200 body', () => {
       key: 'asd',
       hello: 'world',
       method: 'GET',
-    });
-  });
-});
+    })
+  })
+})
 
 it('PUT /create headers', () => {
   cy.request({
@@ -33,6 +33,6 @@ it('PUT /create headers', () => {
   })
     .its('headers')
     .then((headers) => {
-      expect(headers).to.have.property('access-control-allow-methods');
-    });
-});
+      expect(headers).to.have.property('access-control-allow-methods')
+    })
+})

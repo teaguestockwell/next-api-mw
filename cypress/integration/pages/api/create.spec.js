@@ -4,9 +4,9 @@ it('GET /create => 200', () => {
     url: 'http://localhost:3000/api/create',
     failOnStatusCode: false,
   }).then((response) => {
-    expect(response.status).to.eq(200);
-  });
-});
+    expect(response.status).to.eq(200)
+  })
+})
 
 it('GET /create?hello=world => 200', () => {
   cy.request({
@@ -14,9 +14,9 @@ it('GET /create?hello=world => 200', () => {
     url: 'http://localhost:3000/api/create?hello=world',
     failOnStatusCode: false,
   }).then((response) => {
-    expect(response.status).to.eq(200);
-  });
-});
+    expect(response.status).to.eq(200)
+  })
+})
 
 it('POST /create => 200', () => {
   cy.request({
@@ -24,9 +24,9 @@ it('POST /create => 200', () => {
     url: 'http://localhost:3000/api/create',
     failOnStatusCode: false,
   }).then((response) => {
-    expect(response.status).to.eq(200);
-  });
-});
+    expect(response.status).to.eq(200)
+  })
+})
 
 it('PUT /create => 405', () => {
   cy.request({
@@ -34,9 +34,9 @@ it('PUT /create => 405', () => {
     url: 'http://localhost:3000/api/create',
     failOnStatusCode: false,
   }).then((response) => {
-    expect(response.status).to.equal(405);
-  });
-});
+    expect(response.status).to.equal(405)
+  })
+})
 
 it('HEAD /create => 405', () => {
   cy.request({
@@ -44,9 +44,9 @@ it('HEAD /create => 405', () => {
     url: 'http://localhost:3000/api/create',
     failOnStatusCode: false,
   }).then((response) => {
-    expect(response.status).to.equal(405);
-  });
-});
+    expect(response.status).to.equal(405)
+  })
+})
 
 it('DELETE /create => 405', () => {
   cy.request({
@@ -54,9 +54,9 @@ it('DELETE /create => 405', () => {
     url: 'http://localhost:3000/api/create',
     failOnStatusCode: false,
   }).then((response) => {
-    expect(response.status).to.equal(405);
-  });
-});
+    expect(response.status).to.equal(405)
+  })
+})
 
 it('PATCH /create => 405', () => {
   cy.request({
@@ -64,9 +64,9 @@ it('PATCH /create => 405', () => {
     url: 'http://localhost:3000/api/create',
     failOnStatusCode: false,
   }).then((response) => {
-    expect(response.status).to.equal(405);
-  });
-});
+    expect(response.status).to.equal(405)
+  })
+})
 
 it('PUT /create body', () => {
   cy.request({
@@ -74,9 +74,9 @@ it('PUT /create body', () => {
     url: 'http://localhost:3000/api/create',
     failOnStatusCode: false,
   }).then((response) => {
-    expect(response.body).to.deep.equal({ msg: `Method: PUT not allowed` });
-  });
-});
+    expect(response.body).to.deep.equal({ msg: `Method: PUT not allowed` })
+  })
+})
 
 it('PUT /create headers', () => {
   cy.request({
@@ -86,6 +86,6 @@ it('PUT /create headers', () => {
   })
     .its('headers')
     .then((headers) => {
-      expect(headers).to.have.property('access-control-allow-methods');
-    });
-});
+      expect(headers).to.have.property('access-control-allow-methods')
+    })
+})

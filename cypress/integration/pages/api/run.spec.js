@@ -4,9 +4,9 @@ it('GET /run => 200', () => {
     url: 'http://localhost:3000/api/run',
     failOnStatusCode: false,
   }).then((response) => {
-    expect(response.status).to.eq(200);
-  });
-});
+    expect(response.status).to.eq(200)
+  })
+})
 
 it('GET /run => body', () => {
   cy.request({
@@ -14,6 +14,6 @@ it('GET /run => body', () => {
     url: 'http://localhost:3000/api/run',
     failOnStatusCode: false,
   }).then((response) => {
-    expect(response.body).to.deep.equal({ msg: 'ok' });
-  });
-});
+    expect(response.body).to.deep.equal({ msg: 'ok' })
+  })
+})
