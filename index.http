@@ -11,3 +11,6 @@ Content-Type: application/json
 }
 ###
 GET http://localhost:3000/api/class?foo=bar
+
+###
+GET http://localhost:3000/api/yup?foo=apple&bar=orange
