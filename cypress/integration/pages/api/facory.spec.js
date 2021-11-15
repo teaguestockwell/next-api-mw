@@ -1,7 +1,7 @@
-it('GET /class => 200', () => {
+it('GET /factory => 200', () => {
   cy.request({
     method: 'GET',
-    url: 'http://localhost:3000/api/class?foo=bar',
+    url: 'http://localhost:3000/api/factory?foo=bar',
     failOnStatusCode: false,
   }).then((response) => {
     expect(response.status).to.eq(200)

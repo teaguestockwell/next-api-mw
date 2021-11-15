@@ -1,7 +1,6 @@
-import { nextApiMw } from '../../src/index'
+import { createMiddleware, createRouteFactory } from '../../src/index'
 
-const usingMethods = nextApiMw.create(
-  async (req, res, end, verbs: string[]) => {
+const usingMethods = createMiddleware(async ({req, res, end},verbs: string[]) => {
     const method = String(req.method).toUpperCase()
     const allowedMethods = verbs.map((v) => v.toUpperCase())
 
@@ -18,7 +17,9 @@ const usingMethods = nextApiMw.create(
   }
 )
 
-export default nextApiMw.run(async (req, res, end) => {
+const rf = createRouteFactory({})
+
+export default rf.createHandler(async ({req, res, end}) => {
   // method will always be 'GET' | 'POST'
   // when the method is not allowed, the request will end here
   const method = await usingMethods(req, res, ['GET', 'POST'])

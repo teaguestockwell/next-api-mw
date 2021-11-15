@@ -1,4 +1,4 @@
-it('GET /class => 200', () => {
+it('GET /yup => 200', () => {
   cy.request({
     method: 'GET',
     url: 'http://localhost:3000/api/yup?hello=world',

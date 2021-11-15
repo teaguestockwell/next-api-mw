@@ -1,4 +1,4 @@
-import { nextApiMw } from '../../src/index'
+import { createRouteFactory, createMiddleware } from '../../src/index'
 import * as yup from 'yup'
 
 const schema = yup.object().shape({
@@ -6,7 +6,7 @@ const schema = yup.object().shape({
   bar: yup.string().required(),
 })
 
-const usingFooBarQuery = nextApiMw.create(async (req, res, end) => {
+const usingFooBarQuery = createMiddleware(async ({req, res, end}) => {
   try {
     await schema.validate(req.query)
   } catch (e) {
@@ -16,7 +16,9 @@ const usingFooBarQuery = nextApiMw.create(async (req, res, end) => {
   return req.query as { foo: string; bar: string }
 })
 
-export default nextApiMw.run(async (req, res, end) => {
+const rf = createRouteFactory({})
+
+export default rf.createHandler(async ({req, res, end}) => {
   const query = await usingFooBarQuery(req, res)
   res.status(200).json(query)
   end()
