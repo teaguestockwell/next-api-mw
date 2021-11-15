@@ -1,28 +1,32 @@
 {
-  "version": "0.1.0",
+  "version": "0.1.2",
   "license": "MIT",
+  "description": "Compose middleware for Next.js API routes like React Hooks",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "engines": {
+    "node": ">=10"
+  },
   "files": [
     "dist",
     "src"
   ],
-  "engines": {
-    "node": ">=10"
-  },
+  "keywords": [
+    "next",
+    "nextjs",
+    "middleware",
+    "api",
+    "api",
+    "routes",
+    "api routes"
+  ],
   "scripts": {
-    "build": "tsdx build",
+    "build": "rollup -c && tsc",
+    "prepublish": "build",
     "dev": "next dev -p 3000",
     "test": "cypress run",
     "test:watch": "cypress open",
-    "lint": "tsdx lint",
-    "prepare": "tsdx build",
-    "size": "size-limit",
-    "analyze": "size-limit --why"
-  },
-  "peerDependencies": {
-    "react": "^16.13.1 || ^17",
-    "react-dom": "^16.13.1 || ^17"
+    "size": "size-limit"
   },
   "husky": {
     "hooks": {
@@ -35,21 +39,18 @@
     "trailingComma": "es5",
     "tabWidth": 2
   },
+  "size-limit": [
+    {
+      "path": "dist/index.js",
+      "limit": "3 kB"
+    }
+  ],
   "name": "next-api-mw",
   "author": "teagueStockwell",
   "module": "dist/next-api-mw.esm.js",
-  "size-limit": [
-    {
-      "path": "dist/next-api-mw.cjs.production.min.js",
-      "limit": "10 KB"
-    },
-    {
-      "path": "dist/next-api-mw.esm.js",
-      "limit": "10 KB"
-    }
-  ],
   "devDependencies": {
-    "@size-limit/preset-small-lib": "^6.0.4",
+    "@open-wc/building-rollup": "^2.0.1",
+    "@size-limit/preset-app": "^6.0.4",
     "@types/react": "^17.0.34",
     "@types/react-dom": "^17.0.11",
     "cypress": "^9.0.0",
@@ -60,9 +61,20 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "size-limit": "^6.0.4",
-    "tsdx": "^0.14.1",
-    "tslib": "^2.3.1",
     "typescript": "^4.4.4",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "rollup": "^2.60.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.30.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tsAppDevelopment/next-api-mw"
+  },
+  "bugs": {
+    "url": "https://github.com/tsAppDevelopment/next-api-mw/issues"
+  },
+  "homepage": "https://github.com/tsAppDevelopment/next-api-mw",
+  "dependencies": {
   }
 }
