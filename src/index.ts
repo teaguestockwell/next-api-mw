@@ -14,12 +14,12 @@ type Handler = (
   end: () => void
 ) => Promise<void>;
 
-export class ApiClose extends Error {
+class ApiClose extends Error {
   readonly name: string;
 
   constructor() {
-    super('ApiError');
-    this.name = 'ApiError';
+    super('ApiClose');
+    this.name = 'ApiClose';
   }
 }
 
@@ -67,7 +67,7 @@ export class Middleware {
   ) {
     let logConsole;
 
-    if (e.name === 'ApiError') {
+    if (e.name === 'ApiClose') {
       logConsole = () =>
         console.log(`${req.method} ${req.url} => ${res.statusCode}`);
       logger(req, res);
@@ -92,7 +92,7 @@ export class Middleware {
       return;
     }
 
-    if (e.name !== 'ApiError') {
+    if (e.name !== 'ApiClose') {
       logConsole();
       return;
     }
@@ -103,7 +103,7 @@ export class Middleware {
     return async (req, res) => {
       await handler(req, res, end).catch((e) => {
         // unknown runtime error that is not expected
-        if (e.name !== 'ApiError') {
+        if (e.name !== 'ApiClose') {
           this.onServerError(res);
         }
 

@@ -29,6 +29,7 @@ it('PUT /create headers', () => {
     method: 'PUT',
     url: 'http://localhost:3000/api/nested-create',
     failOnStatusCode: false,
+    body: { key: 'asd' },
   })
     .its('headers')
     .then((headers) => {
