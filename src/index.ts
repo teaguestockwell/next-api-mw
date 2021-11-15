@@ -7,7 +7,7 @@ type Logger = (
     e?: Error;
     name: string;
   }
-) => Promise<void> | void;
+) => Promise<void>
 
 type Handler = (
   req: NextApiRequest,
@@ -45,7 +45,6 @@ const defaults: MiddlewareParams = {
   },
 
   devLogger: async ({req,res,e,name}) => {
-    if(process.env.NODE_ENV === 'production') return
 
     const method = req.method ?? 'no method'
     const url = req.url ?? 'no url'
@@ -95,12 +94,23 @@ export class NextApiMw {
         }
 
         const { name } = this.params;
+        
         // callback to the provided logger
-        this.params.logger({req, res, name, e: unHandledError});
+        this.params.logger({req, res, name, e: unHandledError}).catch((err) => {
+          console.error(
+            `${this.params.name}-logger: ${err}`
+          )
+        })
 
         // a helper for better visibility during development
         // that way if an unexpected error ocurred this top level error boundary will display it
-        this.params.devLogger({req, res, name, e: unHandledError});
+        if(process.env.NODE_ENV !== 'production'){
+          this.params.devLogger({req, res, name, e: unHandledError}).catch((err) => {
+            console.error(
+              `${this.params.name}-devLogger: ${err}`
+            )
+          });
+        }
       })
     };
   }
