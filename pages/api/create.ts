@@ -1,6 +1,6 @@
-import { middleware } from '../../src/index';
+import { nextApiMw } from '../../src/index';
 
-const usingMethods = middleware.create(
+const usingMethods = nextApiMw.create(
   async (req, res, end, verbs: string[]) => {
     const method = String(req.method).toUpperCase();
     const allowedMethods = verbs.map((v) => v.toUpperCase());
@@ -16,7 +16,7 @@ const usingMethods = middleware.create(
   }
 );
 
-export default middleware.run(async (req, res, end) => {
+export default nextApiMw.run(async (req, res, end) => {
   const method = await usingMethods(req, res, ['get', 'POST']);
   res.json({ msg: `Method: ${method}` });
   end();

@@ -1,17 +1,18 @@
 import { NextApiRequest, NextApiResponse, NextApiHandler } from 'next';
 
 type Logger = (
-  req: NextApiRequest,
-  res: NextApiResponse,
-  e?: Error
+  p: {
+    req: NextApiRequest;
+    res: NextApiResponse;
+    e?: Error;
+    name: string;
+  }
 ) => Promise<void> | void;
-
-type ConsoleLogLevel = 'all' | 'unhandled' | 'none';
 
 type Handler = (
   req: NextApiRequest,
   res: NextApiResponse,
-  end: () => void
+  end: () => void,
 ) => Promise<void>;
 
 class ApiClose extends Error {
@@ -27,99 +28,86 @@ const end = () => {
   throw new ApiClose();
 };
 
-export class Middleware {
-  private logger: Logger;
-  private onServerError: (res: NextApiResponse) => void;
-  private consoleLogLevel: ConsoleLogLevel;
-  private name: string;
+type MiddlewareParams = {
+  name: string;
+  devLogger: Logger;
+  onServerError: (p: {res: NextApiResponse, e:Error}) => void;
+  logger: Logger;
+}
 
-  constructor(params?: {
-    logger?: Logger;
-    onServerError?: (res: NextApiResponse) => void;
-    consoleLogLevel?: ConsoleLogLevel;
-    name?: string;
-  }) {
-    if (!params) {
-      this.logger = async () => {};
-      this.onServerError = (res) =>
-        res.status(500).json({ error: 'internal server error' });
-      this.consoleLogLevel = 'all';
-      this.name = '';
+const defaults: MiddlewareParams = {
+  name: '',
+
+  logger: async () => {},
+
+  onServerError: ({res}) => {
+    res.status(500).json({msg: 'Internal Server Error'});
+  },
+
+  devLogger: async ({req,res,e,name}) => {
+    if(process.env.NODE_ENV === 'production') return
+
+    const method = req.method ?? 'no method'
+    const url = req.url ?? 'no url'
+    const status = res.statusCode ?? 'no status'
+
+    if(e){
+      console.error(`${method} ${url} => ${status}: An unhandled exception was caught inside ${name}: ${e}`)
     } else {
-      this.logger = params.logger ? params.logger : async () => {};
-      this.onServerError = params.onServerError
-        ? params.onServerError
-        : (res) => res.status(500).json({ error: 'internal server error' });
-      this.consoleLogLevel = params.consoleLogLevel
-        ? params.consoleLogLevel
-        : 'all';
-      this.name = params.name ? params.name : '';
+      console.log(`${method} ${url} => ${status}`)
     }
   }
-
-  private handleLogs(
-    req: NextApiRequest,
-    res: NextApiResponse,
-    logger: any,
-    consoleLogLevel: string,
-    name: string,
-    e: Error
-  ) {
-    let logConsole;
-
-    if (e.name === 'ApiClose') {
-      logConsole = () =>
-        console.log(`${req.method} ${req.url} => ${res.statusCode}`);
-      logger(req, res);
-    } else {
-      logConsole = () =>
-        console.error(
-          `${req.method} ${req.url} => ${
-            res.statusCode
-          }: An unhandled exception was caught inside ${
-            name ? name : 'middleware'
-          }: ${e}`
-        );
-      logger(req, res, e);
-    }
-
-    if (consoleLogLevel === 'none') {
-      return;
-    }
-
-    if (consoleLogLevel === 'all') {
-      logConsole();
-      return;
-    }
-
-    if (e.name !== 'ApiClose') {
-      logConsole();
-      return;
+}
+export class NextApiMw {
+  params: MiddlewareParams 
+  
+  constructor(p?: Partial<MiddlewareParams>) {
+    this.params = {
+      name: p?.name ?? defaults.name,
+      logger: p?.logger ?? defaults.logger,
+      devLogger: p?.devLogger ?? defaults.devLogger,
+      onServerError: p?.onServerError ?? defaults.onServerError,
     }
   }
 
   // run with middleware
   run(handler: Handler): NextApiHandler {
     return async (req, res) => {
-      await handler(req, res, end).catch((e) => {
-        // unknown runtime error that is not expected
-        if (e.name !== 'ApiClose') {
-          this.onServerError(res);
+      // run the provided handler for the route
+      // and send a response in a middleware of the handler
+      // after the res is send calling end() will throw a ApiClose error
+      // this releases control back to this function
+      await handler(req, res, end)
+      .then(() => {
+        if(process.env.NODE_ENV !== 'production') {
+          console.log(`${req.method} ${req.url} => ${res.statusCode}: You may have forgotten to call end() inside ${this.params.name} after sending the response`)
+        }
+        end();
+      })
+      .catch((e) => {
+        
+        // an unexpected error occurred, the handler or it's middleware
+        // where not able to send the request, so send it using the onServerError fallback
+        const unHandledError = e?.name === 'ApiClose' ? null : e
+
+        if (unHandledError) {
+          this.params.onServerError({res, e: unHandledError});
         }
 
-        this.handleLogs(
-          req,
-          res,
-          this.logger,
-          this.consoleLogLevel,
-          this.name,
-          e
-        );
-      });
+        const { name } = this.params;
+        // callback to the provided logger
+        this.params.logger({req, res, name, e: unHandledError});
+
+        // a helper for better visibility during development
+        // that way if an unexpected error ocurred this top level error boundary will display it
+        this.params.devLogger({req, res, name, e: unHandledError});
+      })
     };
   }
 
-  // create middleware
+  // create a new middleware
+  // expose the end callback to the newly created middleware
+  // so it can stop the middleware stack if it decides to handle a request
   create<T, Q>(
     handler: (
       req: NextApiRequest,
@@ -128,10 +116,16 @@ export class Middleware {
       args?: T
     ) => Promise<Q>
   ) {
-    return (req: NextApiRequest, res: NextApiResponse, args?: T) => {
+
+    // when a middleware is consumed by by calling it in another handler or middleware
+    // pass it's argument and return types to the consumer 
+    return (req: NextApiRequest, res: NextApiResponse, args?: T): Promise<Q> => {
       return handler(req, res, end, args);
     };
   }
 }
 
-export const middleware = new Middleware();
+// you may create your own middleware factory 
+// by instantiating the Middleware class with a logger and onServerError and exporting it
+// or you may use an instance of the default factory
+export const nextApiMw = new NextApiMw();

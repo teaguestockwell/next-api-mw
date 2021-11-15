@@ -34,7 +34,7 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "nextjs-api-middleware",
+  "name": "nextjs-api-mw",
   "author": "teagueStockwell",
   "module": "dist/nextjs-api-middleware.esm.js",
   "size-limit": [

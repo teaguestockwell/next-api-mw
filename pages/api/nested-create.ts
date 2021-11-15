@@ -1,6 +1,6 @@
-import { middleware } from '../../src/index';
+import { nextApiMw } from '../../src/index';
 
-const usingGet = middleware.create(async (req, res, end) => {
+const usingGet = nextApiMw.create(async (req, res, end) => {
   const method = String(req.method).toUpperCase();
 
   res.setHeader('access-control-allow-methods', 'GET');
@@ -13,20 +13,21 @@ const usingGet = middleware.create(async (req, res, end) => {
   return method;
 });
 
-const usingHelloParam = middleware.create(async (req, res, end) => {
+const usingHelloParam = nextApiMw.create(async (req, res, end) => {
   const { hello } = req.query;
 
-  res.setHeader('hello', hello);
-
-  if (!hello) {
+  
+  if (!hello || typeof hello !== 'string') {
     res.status(400).send({ msg: 'hello query param req' });
     end();
   }
+  
+  res.setHeader('hello', hello);
 
-  return hello;
+  return hello as string;
 });
 
-const usingBodyKey = middleware.create((req, res, end) => {
+const usingBodyKey = nextApiMw.create((req, res, end) => {
   const { key } = req.body;
 
   if (!key) {
@@ -37,11 +38,16 @@ const usingBodyKey = middleware.create((req, res, end) => {
   return key;
 });
 
-
-export default middleware.run(async (req, res, end) => {
+const usingNested = nextApiMw.create(async (req, res) => {
   const method = await usingGet(req, res);
   const hello = await usingHelloParam(req, res);
   const key = await usingBodyKey(req, res);
+
+  return { method, hello, key }
+})
+
+export default nextApiMw.run(async (req, res, end) => {
+  const {hello, key, method} = await usingNested(req, res);
 
   res.status(200).json({ hello, key, method });
   end();
