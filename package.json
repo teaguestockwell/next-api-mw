@@ -1,5 +1,5 @@
 {
-  "version": "0.1.2",
+  "version": "0.2.1",
   "license": "MIT",
   "description": "Compose middleware for Next.js API routes like React Hooks",
   "main": "dist/index.js",
@@ -60,12 +60,12 @@
     "pretty-quick": "^3.1.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "size-limit": "^6.0.4",
-    "typescript": "^4.4.4",
-    "yup": "^0.32.11",
     "rollup": "^2.60.0",
     "rollup-plugin-terser": "^7.0.2",
-    "rollup-plugin-typescript2": "^0.30.0"
+    "rollup-plugin-typescript2": "^0.30.0",
+    "size-limit": "^6.0.4",
+    "typescript": "^4.4.4",
+    "yup": "^0.32.11"
   },
   "repository": {
     "type": "git",
@@ -74,7 +74,5 @@
   "bugs": {
     "url": "https://github.com/tsAppDevelopment/next-api-mw/issues"
   },
-  "homepage": "https://github.com/tsAppDevelopment/next-api-mw",
-  "dependencies": {
-  }
+  "homepage": "https://github.com/tsAppDevelopment/next-api-mw"
 }

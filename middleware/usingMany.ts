@@ -1,4 +1,4 @@
-import { createMiddleware, createRouteFactory } from '../../src/index'
+import { createMiddleware } from '../src'
 
 const usingGet = createMiddleware(async ({req, res, end}) => {
   const method = String(req.method).toUpperCase()
@@ -37,19 +37,10 @@ const usingBodyKey = createMiddleware(async ({req, res, end}) => {
   return key as string
 })
 
-const usingNested = createMiddleware(async ({req, res}) => {
-  const method = await usingGet(req, res)
-  const hello = await usingHelloParam(req, res)
-  const key = await usingBodyKey(req, res)
+export const usingMany = createMiddleware(async ({req, res}) => {
+  const method = await usingGet({req, res})
+  const hello = await usingHelloParam({req, res})
+  const key = await usingBodyKey({req, res})
 
   return { method, hello, key }
-})
-
-const rf = createRouteFactory({})
-
-export default rf.createHandler(async ({req, res, end}) => {
-  const { hello, key, method } = await usingNested(req, res)
-
-  res.status(200).json({ hello, key, method })
-  end()
 })

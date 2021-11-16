@@ -1,7 +1,7 @@
-it('GET /factory => 200', () => {
+it('GET /example => 200', () => {
   cy.request({
     method: 'GET',
-    url: 'http://localhost:3000/api/factory?foo=bar',
+    url: 'http://localhost:3000/api/example?foo=bar',
     failOnStatusCode: false,
   }).then((response) => {
     expect(response.status).to.eq(200)
@@ -9,10 +9,10 @@ it('GET /factory => 200', () => {
   })
 })
 
-it('GET /create?hello=world => 400', () => {
+it('GET /example => 400', () => {
   cy.request({
     method: 'GET',
-    url: 'http://localhost:3000/api/class?hello=world',
+    url: 'http://localhost:3000/api/example?hello=world',
     failOnStatusCode: false,
   }).then((response) => {
     expect(response.status).to.eq(400)

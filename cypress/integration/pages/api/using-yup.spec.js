@@ -1,17 +1,17 @@
-it('GET /yup => 200', () => {
+it('GET /using-yup => 200', () => {
   cy.request({
     method: 'GET',
-    url: 'http://localhost:3000/api/yup?hello=world',
+    url: 'http://localhost:3000/api/using-yup?hello=world',
     failOnStatusCode: false,
   }).then((response) => {
     expect(response.status).to.eq(400)
   })
 })
 
-it('GET /create?hello=world => 400', () => {
+it('GET /using-yup => 400', () => {
   cy.request({
     method: 'GET',
-    url: 'http://localhost:3000/api/yup?foo=apple&bar=pear',
+    url: 'http://localhost:3000/api/using-yup?foo=apple&bar=pear',
     failOnStatusCode: false,
   }).then((response) => {
     expect(response.status).to.eq(200)

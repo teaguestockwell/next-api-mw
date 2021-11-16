@@ -1,7 +1,7 @@
-it('GET /create => 200', () => {
+it('GET /using-many => 200', () => {
   cy.request({
     method: 'GET',
-    url: 'http://localhost:3000/api/nested-create?hello=world',
+    url: 'http://localhost:3000/api/using-many?hello=world',
     failOnStatusCode: false,
     body: { key: 'asd' },
   }).then((response) => {
@@ -9,10 +9,10 @@ it('GET /create => 200', () => {
   })
 })
 
-it('GET /create => 200 body', () => {
+it('GET /using-many => 200 body', () => {
   cy.request({
     method: 'GET',
-    url: 'http://localhost:3000/api/nested-create?hello=world',
+    url: 'http://localhost:3000/api/using-many?hello=world',
     failOnStatusCode: false,
     body: { key: 'asd' },
   }).then((response) => {
@@ -24,10 +24,10 @@ it('GET /create => 200 body', () => {
   })
 })
 
-it('PUT /create headers', () => {
+it('PUT /using-many headers', () => {
   cy.request({
     method: 'PUT',
-    url: 'http://localhost:3000/api/nested-create',
+    url: 'http://localhost:3000/api/using-many',
     failOnStatusCode: false,
     body: { key: 'asd' },
   })
