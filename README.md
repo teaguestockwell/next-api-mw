@@ -43,7 +43,7 @@
 
 ## About The Project
 
-Consuming API middleware should be as easy as using hooks in React. When using next-api-mw you can abstract common logic like auth or verifying query params into a middleware that can ve used inside of an API route.
+Consuming API middleware should be as easy as using hooks in React. When using next-api-mw you can abstract common logic like auth or verifying query params into a middleware that can be used inside of an API route.
 
 When calling middleware inside your route, that middleware may either return a promise, or handle the request itself thereby stopping the rest of the handler and or middleware from running.
 
