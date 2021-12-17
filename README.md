@@ -1,8 +1,8 @@
 [![license-shield]][license-url] [![linkedin-shield]][linkedin-url] ![size-url] ![size-url2] [![npm-v]][npm-url] [![gh-shield]][gh-url]
 
-[license-shield]: https://img.shields.io/github/license/tsAppDevelopment/next-api-mw.svg
+[license-shield]: https://img.shields.io/github/license/teaguestockwell/next-api-mw.svg
 
-[license-url]: https://github.com/tsAppDevelopment/next-api-mw/blob/master/LICENSE
+[license-url]: https://github.com/teaguestockwell/next-api-mw/blob/master/LICENSE
 
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?logo=linkedin&colorB=555
 
@@ -18,7 +18,7 @@
 
 [gh-shield]: https://img.shields.io/badge/-GitHub-black.svg?logo=github&colorB=555
 
-[gh-url]: https://github.com/tsAppDevelopment/next-api-mw
+[gh-url]: https://github.com/teaguestockwell/next-api-mw
 <!-- PROJECT LOGO -->
 <br />
 <p align='center'>
@@ -84,7 +84,7 @@ export default handlerFactory.getHandler(async ({req, res, end}) => {
 ```
 ## Roadmap
 
-See the [open issues](https://github.com/tsappdevelopment/next-api-mw/issues) for a list of proposed features (and known issues).
+See the [open issues](https://github.com/teaguestockwell/next-api-mw/issues) for a list of proposed features (and known issues).
 
 ## Contributing
 I'm open to all community contributions! If you'd like to contribute in any way
