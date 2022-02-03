@@ -8,10 +8,14 @@ export const handlerFactory = new HandlerFactory({
   handleError: async ({req,res,e}) => {
     res.status(500).json({ msg: 'server error' })
   },
-  devLogger: async ({req,res,e}) => {
-    
-  },
   logger: async ({req,res,e}) => {
     
+  },
+  rootMiddleware: async ({req, res, end}) => {
+    console.log(req.url)
+    if(req.url.includes('token')){
+      res.status(200).json({msg: 'token-accepted'})
+      end()
+    }
   }
 })
