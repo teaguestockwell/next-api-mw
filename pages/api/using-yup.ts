@@ -1,4 +1,5 @@
-import {usingYup, handlerFactory } from '../../middleware'
+import { usingYup } from '../../middleware'
+import { handlerFactory } from './example'
 
 export default handlerFactory.getHandler(async ({req, res, end}) => {
   const query = await usingYup({req, res})

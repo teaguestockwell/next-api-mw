@@ -1,4 +1,5 @@
-import { usingMany, handlerFactory} from '../../middleware'
+import { usingMany } from '../../middleware'
+import { handlerFactory } from './example'
 
 export default handlerFactory.getHandler(async ({req, res, end}) => {
   const { hello, key, method } = await usingMany({req, res})

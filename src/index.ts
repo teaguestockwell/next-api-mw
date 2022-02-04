@@ -106,8 +106,8 @@ export class HandlerFactory {
     handleError = async ({ res }) => {
       res.status(500).json({ msg: 'Internal Server Error' })
     },
-    rootMiddleware = async ({ end }) => {
-      end()
+    rootMiddleware = async () => {
+  
     },
   }: {
     logger?: Runner
@@ -119,39 +119,42 @@ export class HandlerFactory {
     this.rootMiddleware = rootMiddleware
   }
 
+  /**
+   * @returns A boolean denoting if the route is complete
+   */
   private async fulfillRoute({
     promise,
     logger,
     handleError,
     req,
     res,
-    noEndMsg,
+    isRoot
   }: {
     promise: Promise<void>
     logger: Runner
     handleError: Runner
     req: Req
     res: Res
-    noEndMsg: string
+    isRoot: boolean
   }) {
-    return promise
-      .then(() => {
-        devError(noEndMsg + ' did not call end')
+    try{
+      await promise
+      if(!isRoot){
+        devError(`${req.method} ${req.url} => ${res.statusCode} did not call end()`)
         end()
-      })
-      .catch((maybeError) => {
-        const e = maybeError?.name === 'api-mw' ? undefined : maybeError
-        try {
-          if (e) {
-            handleError({ req, res, e })
-          }
-          logger({ req, res, e })
-        } catch (err) {
-          devError(err)
-        }
+      }
+    } catch (maybeError:any) {
+      const e = maybeError?.name === 'api-mw' ? undefined : maybeError
+      if (e) {
+        handleError({ req, res, e }).catch(e => devError(`Handle error threw ${e}`))
+      }
 
-        return !!e
-      })
+      logger({ req, res, e }).catch(e => devError(`The logger threw ${e}`))
+
+      return true
+    }
+
+    return false
   }
 
   /**
@@ -170,7 +173,7 @@ export class HandlerFactory {
         handleError: this.handleError,
         req,
         res,
-        noEndMsg: 'rootMiddleware',
+        isRoot: true,
       })
 
       if(!isComplete){
@@ -178,9 +181,9 @@ export class HandlerFactory {
           req,
           res,
           promise: route({ req, res, end }),
-          noEndMsg: `${req.method} ${req.url} => ${res.statusCode}`,
           handleError: this.handleError,
           logger: this.logger,
+          isRoot: false,
         }) 
       }
     }
