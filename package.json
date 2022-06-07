@@ -1,5 +1,5 @@
 {
-  "version": "0.3.0",
+  "version": "0.3.1",
   "license": "MIT",
   "description": "Compose middleware for Next.js API routes like React Hooks",
   "main": "dist/index.js",
@@ -46,7 +46,11 @@
     }
   ],
   "name": "next-api-mw",
-  "author": "teagueStockwell",
+  "author": {
+    "name": "Teague Stockwell",
+    "email": "tsappdevelopment@gmail.com",
+    "url": "https://teaguestockwell.com"
+  },
   "module": "dist/next-api-mw.esm.js",
   "devDependencies": {
     "@open-wc/building-rollup": "^2.0.1",
